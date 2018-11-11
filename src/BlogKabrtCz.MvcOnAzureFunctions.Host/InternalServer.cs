@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace BlogKabrtCz.MvcOnAzureFunctions.Host {
     public class InternalServer : IServer {
         private bool _disposed = false;
+        private IWebHost _host;
 
         public static InternalServer Instance { get; set; }
         static InternalServer() {
@@ -19,7 +20,6 @@ namespace BlogKabrtCz.MvcOnAzureFunctions.Host {
         }
 
         public IHttpApplication<Microsoft.AspNetCore.Hosting.Internal.HostingApplication.Context> Application;
-        public IWebHost Host;
 
         public InternalServer(IWebHostBuilder builder)
                     : this(builder, new FeatureCollection()) {
@@ -28,7 +28,7 @@ namespace BlogKabrtCz.MvcOnAzureFunctions.Host {
         public InternalServer(IWebHostBuilder builder, IFeatureCollection featureCollection) {
             var host = builder.UseServer(this).Build();
             host.StartAsync().GetAwaiter().GetResult();
-            this.Host = host;
+            _host = host;
         }
 
         public IFeatureCollection Features { get; }
@@ -36,7 +36,7 @@ namespace BlogKabrtCz.MvcOnAzureFunctions.Host {
         public void Dispose() {
             if (!_disposed) {
                 _disposed = true;
-                this.Host.Dispose();
+                _host.Dispose();
             }
         }
 
