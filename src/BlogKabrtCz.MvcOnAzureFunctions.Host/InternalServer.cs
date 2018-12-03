@@ -31,7 +31,7 @@ namespace BlogKabrtCz.MvcOnAzureFunctions.Host {
             _host = host;
         }
 
-        public IFeatureCollection Features { get; }
+        public IFeatureCollection Features { get; } = new FeatureCollection();
 
         public void Dispose() {
             if (!_disposed) {
